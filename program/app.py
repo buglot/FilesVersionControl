@@ -47,7 +47,9 @@ while 1:
                 print("not file put")
             else:
                 for x in os.listdir("save"):
-                    upload(x+"_"+name+f"{time.time()}")
+                    named_tuple = time.localtime() 
+                    time_string = time.strftime("%H:%M:%S", named_tuple)
+                    upload(x+"_"+name+time_string)
         case "exit":
             exit()
 ftp.quit()
