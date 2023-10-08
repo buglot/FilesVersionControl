@@ -2,6 +2,7 @@ from ftplib import FTP
 from printColor import *
 from dir import * 
 import os
+import time
 ftp = FTP("10.64.59.68")
 ftp.login(user="myuser", passwd="mypassword")
 printHeader(" Connected Server ")
@@ -46,7 +47,7 @@ while 1:
                 print("not file put")
             else:
                 for x in os.listdir("save"):
-                    upload(os.path.join("save",x))
+                    upload(x+"_"+name+f"{time.time()}")
         case "exit":
             exit()
 ftp.quit()
