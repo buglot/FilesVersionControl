@@ -22,12 +22,12 @@ def donwload(files,local =""):
             os.mkdir("save")
     with open(local, "wb") as local_file:
         ftp.retrbinary("RETR " + files, local_file.write)
-def upload(files,name):
+def upload(files,x,name):
     global ftp
     named_tuple = time.localtime() 
     time_string = time.strftime("%H-%M-%S", named_tuple)
     
-    remote_file_name = files+"_name=="+name+time_string
+    remote_file_name = x+"_name=="+name+time_string
     with open(files, "rb") as local_file:
         ftp.storbinary("STOR " + remote_file_name, local_file)
 print()
@@ -50,7 +50,7 @@ while 1:
             else:
                 for x in os.listdir("save"):
                     
-                    upload(os.path.join("save",x),name)
+                    upload(os.path.join("save",x),x,name)
         case "exit":
             exit()
 ftp.quit()
