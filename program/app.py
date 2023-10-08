@@ -15,9 +15,10 @@ def printFILEcloud():
 def donwload(files,local =""):
     global ftp
     if local == "":
-        if os.path.exists("save")==False:
+       
+        local= os.path.join("save",files)
+    if os.path.exists("save")==False:
             os.mkdir("save")
-        local="save/"+files
     with open(local, "wb") as local_file:
         ftp.retrbinary("RETR " + files, local_file.write)
 def upload(files):
@@ -32,16 +33,16 @@ printFILEcloud()
 name = input("Name : ")
 while 1:
     commend = input("promp >> ")
-    match(cd:=commend.split(" ")[0]):
+    match(commend.split(" ")[0]):
         case "download":
-            if len(cd)==2:
-                donwload(cd[1])
+            if len(commend.split(" "))==2:
+                donwload(commend.split(" ")[1])
             else:
                 print("Error")
         case "put":
             if os.path.exists("save")==False:
                 print("no Folder to save")
-            elif os.listdir() is not []:
+            elif os.listdir() is []:
                 print("not file put")
             else:
                 for x in os.listdir("save"):
