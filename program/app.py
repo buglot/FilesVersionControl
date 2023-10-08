@@ -48,8 +48,8 @@ while 1:
             else:
                 for x in os.listdir("save"):
                     named_tuple = time.localtime() 
-                    time_string = time.strftime("%H:%M:%S", named_tuple)
-                    upload(x+"_"+name+time_string)
+                    time_string = time.strftime("%H-%M-%S", named_tuple)
+                    upload(x+"_name=="+name+time_string)
         case "exit":
             exit()
 ftp.quit()
