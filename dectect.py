@@ -4,6 +4,7 @@ listfiles = []
 New_files =[]
 def monitor_folder(folder_path):
     global listfiles
+    listfiles=os.listdir(folder_path)
     while True:
         for filename in os.listdir(folder_path):
             if filename not in listfiles:
