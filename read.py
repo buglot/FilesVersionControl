@@ -1,8 +1,7 @@
 import os
 
-def read_files_in_folder(folder_path):
+def read_files_in_folder(folder_path,file_names:list):
     file_contents = {}
-    file_names = os.listdir(folder_path)
     for file_name in file_names:
         file_path = os.path.join(folder_path, file_name)
         if os.path.isfile(file_path):  # ตรวจสอบว่าเป็นไฟล์
@@ -68,7 +67,7 @@ def compare_files(data :dict,main : str,files : list) -> bool :
 
     return True,line
 
-def manger_file(data :dict[str,list],main : str,path:str,*files):
+def manger_file(data :dict[str,list],main : str,path:str,files:list):
     if len(files)>1:
         dos =compare_files(data,main,files)
         if dos[0]:
@@ -87,17 +86,20 @@ def manger_file(data :dict[str,list],main : str,path:str,*files):
                     except:
                         maindata.insert(j,data[main][j])
                     maindata.pop(j+1)
-            with open(os.path.join(path,main),"w") as f:
-                for x in range(df:=len(maindata)):
-                    f.writelines(maindata[x])
-                    if x != df-1:
-                        f.writelines("\n")
-                f.close()
-           
+            filies_Seve(os.path.join(path,main),maindata)
+        else:
+            for d in files:
+                os.rename(os.path.join(path,d),os.path.join(path,d+".repo"))   
     else:
         os.remove(os.path.join(path,main))
         os.rename(os.path.join(path,files[0]),os.path.join(path,main))
-
+def filies_Seve(path:str,data:list,sep:str="\n"):
+    with open(os.path.join(path),"w") as f:
+        for x in range(df:=len(data)):
+            f.write(data[x])
+            if x != df-1:
+                f.write(sep)
+        f.close()
 if __name__=="__main__":
     data=read_files_in_folder("ftp-data")
     manger_file(data,"a.txt","ftp-data","b.txt","c.txt")
