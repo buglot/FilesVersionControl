@@ -4,7 +4,7 @@ from dir import *
 import threading
 import os
 import time
-
+loop = True
 ftp = FTP(input("IP FTP: "))
 if d:=input("Port (n is skip):")=="n":
     pass
@@ -29,6 +29,8 @@ def printFILEcloud():
             printFile(f)
 def donwload(files,local =""):
     global ftp
+    global loop
+    loop = False
     if local == "":
         local= os.path.join("save",files)
     if os.path.exists("save")==False:
@@ -37,28 +39,31 @@ def donwload(files,local =""):
         ftp.retrbinary("RETR " + files, local_file.write)
         local_file.close()
     times = os.path.getatime(local)
-    with open(os.path.join(".p",local),"wb") as f:
-        f.write(times)
-        f.close() 
+    with open(os.path.join(".p",files),"w") as f:
+        f.write(str(times))
+        f.close()
+    loop =True
 def dectecing():
-    while(1):
+    global loop
+    while 1:
         if os.path.exists("save")==False:
             os.mkdir("save")
         elif os.listdir() is []:
             pass
         else:
-            for x in os.listdir("save"):
-                if os.path.exists(os.path.join(".p",x))==True:
-                    if history(x)< os.path.getmtime(os.path.join("save",x)):
-                        upload(os.path.join("save",x),x,name)
+            if loop:
+                for x in os.listdir("save"):
+                    if os.path.exists(os.path.join(".p",x))==True:
+                        if history(x)< os.path.getmtime(os.path.join("save",x)):
+                            upload(os.path.join("save",x),x,name)
+                            with open(os.path.join(".p",x),"w") as f:
+                                f.write(str(os.path.getmtime(os.path.join("save",x))))
+                                f.close()
+                    else:
                         with open(os.path.join(".p",x),"w") as f:
                             f.write(str(os.path.getmtime(os.path.join("save",x))))
                             f.close()
-                else:
-                    with open(os.path.join(".p",x),"w") as f:
-                        f.write(str(os.path.getmtime(os.path.join("save",x))))
-                        f.close()
-                    upload(os.path.join("save",x),x,name)
+                        upload(os.path.join("save",x),x,name)
 def history(files):
     timee = 0
     histo=os.path.join(".p",files)
@@ -87,6 +92,5 @@ if __name__ == "__main__":
                     print("Error")
             case "exit":
                 exit()
-    
     monitor_thread.join()
     ftp.quit()
