@@ -26,6 +26,11 @@ def file_match(data:list[str])->dict:
 def removeNew_File(a :str):
     global New_files
     New_files.remove(a)
+def repoDetect(key:str,folder_path:str):
+    for x  in os.listdir(folder_path):
+       if x.startswith(key) and x.endswith(".repo"):
+           return True
+    return False
 if __name__ == "__main__":
     print("Sever Manger")
     folder_path = "ftp-data"  # ระบุโฟลเดอร์ที่คุณต้องการตรวจสอบ
@@ -36,9 +41,13 @@ if __name__ == "__main__":
             dr=file_match(New_files)
             for x in dr.keys():
                 print(x)
+                if repoDetect(x,folder_path):
+                    for file in dr[x]:
+                        os.rename(os.path.join(folder_path,file),os.path.join(folder_path,file+".repo"))
+                    continue
                 if dr[x]!=[]:
                     data=read.read_files_in_folder(folder_path,dr[x])
-                    read.manger_file(data,x,folder_path,dr[x])
+                    read.manger_file(data,x,folder_path,New_files)
             New_files=[]
             listfiles=os.listdir(folder_path)        
 

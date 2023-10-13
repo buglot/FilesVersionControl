@@ -87,6 +87,8 @@ def manger_file(data :dict[str,list],main : str,path:str,files:list):
                         maindata.insert(j,data[main][j])
                     maindata.pop(j+1)
             filies_Seve(os.path.join(path,main),maindata)
+            for d in files:
+                os.remove(os.path.join(path,d))   
         else:
             for d in files:
                 os.rename(os.path.join(path,d),os.path.join(path,d+".repo"))   
