@@ -43,7 +43,8 @@ if __name__ == "__main__":
                 print(x)
                 if repoDetect(x,folder_path):
                     for file in dr[x]:
-                        os.rename(os.path.join(folder_path,file),os.path.join(folder_path,file+".repo"))
+                        if file != x:
+                            os.rename(os.path.join(folder_path,file),os.path.join(folder_path,file+".repo"))
                     continue
                 if dr[x]!=[]:
                     data=read.read_files_in_folder(folder_path,dr[x])
