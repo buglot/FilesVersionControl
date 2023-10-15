@@ -63,13 +63,16 @@ def find_common_pairs(arg : list,files:list,data:dict):
             common_elements = []
             for x in pair[0]:
                 if x in pair[1]:
-                    dect=1
                     if head ==0:
                         head=1
                         printColor.printHeaderFile("|%5s|%-40s"%("lines"," "+files[i]),"")
                         printColor.printHeaderFile2("|%5s|%-40s|"%("lines"," "+files[j]))
-                    printColor.printDiff("|%5d| %-39s|%5d| %-39s|"%(x+1,data[files[i]][x],x+1,data[files[j]][x]))
-                    common_elements.append(x) 
+                    if data[files[i]][x] == data[files[j]][x]:
+                        printColor.printDiff("|%5d| %-39s|%5d| %-39s|<--repeat"%(x+1,data[files[i]][x],x+1,data[files[j]][x]))
+                    else:
+                        dect=1
+                        printColor.printDiff("|%5d| %-39s|%5d| %-39s|"%(x+1,data[files[i]][x],x+1,data[files[j]][x]))
+                        common_elements.append(x) 
             if common_elements:
                 common_pairs.append(pair)
     if dect==0:
@@ -80,13 +83,13 @@ def compare_files(data :dict,main : str,files : list) -> bool :
     for x in files:
         line.append(compare_lines_with_main(data,main,x))
     c= find_common_pairs(line,files,data)
-    print("="*75)
     if c !=[]:
         return False,[]
 
     return True,line
 
 def manger_file(data :dict[str,list],main : str,path:str,files:list):
+    files.remove(main)
     if len(files)>1:
         dos =compare_files(data,main,files)
         if dos[0]:
@@ -95,7 +98,7 @@ def manger_file(data :dict[str,list],main : str,path:str,files:list):
             for ii,x in enumerate(dos[1]):
                 if x!=[]:
                     for j in x:
-                        if mainlen<(maxload:=max(x)):
+                        if mainlen<=(maxload:=max(x)):
                             for xd in range(mainlen-1,maxload):
                                 data[main].append("")
                             maindata=data[main]
@@ -106,15 +109,19 @@ def manger_file(data :dict[str,list],main : str,path:str,files:list):
                         except:
                             maindata.insert(j,data[main][j])
                         maindata.pop(j+1)
+            print("save to ",main)
             filies_Seve(os.path.join(path,main),maindata)
             for d in files:
                 os.remove(os.path.join(path,d))   
         else:
+            print("change to .repo",end=" ")
+            print(files,sep=",")
             for d in files:
                 os.rename(os.path.join(path,d),os.path.join(path,d+".repo"))   
     else:
         os.remove(os.path.join(path,main))
         os.rename(os.path.join(path,files[0]),os.path.join(path,main))
+        print("dectect 1 file change ",files[0],"to main")
 def filies_Seve(path:str,data:list,sep:str="\n"):
     with open(os.path.join(path),"w") as f:
         for x in range(df:=len(data)):

@@ -20,8 +20,8 @@ def file_match(data:list[str])->dict:
         key = x.split("_name==")[0]  # ดึงคีย์จากข้อมูล
         if key not in df:
             df[key] = []  # สร้างรายการเปล่าสำหรับคีย์ใหม่ (ถ้ายังไม่มี)
+            df[key].append(key)
         df[key].append(x)  # เพิ่มข้อมูลลงในรายการที่เป็นของคีย์นั้น 
-    df[key].append(key)  
     return df
 def removeNew_File(a :str):
     global New_files
@@ -48,7 +48,8 @@ if __name__ == "__main__":
                     continue
                 if dr[x]!=[]:
                     data=read.read_files_in_folder(folder_path,dr[x])
-                    read.manger_file(data,x,folder_path,New_files)
+                    read.manger_file(data,x,folder_path,dr[x])
+                    print("="*95)
             New_files=[]
             listfiles=os.listdir(folder_path)        
 
